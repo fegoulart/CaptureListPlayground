@@ -24,8 +24,8 @@ class ClassA {
     }
 
     func run(_ classB: ClassB, newName: String, newSurname: String) {
-        var otherSelf: ClassA? = ClassA()
-        classB.execute { [weak self, otherSelf, name, surname] in
+        let otherRef: ClassA = ClassA()
+        classB.execute { [weak self, name, surname] in
             DispatchQueue.global().async {
                 print("Please wait 5 seconds")
                 Thread.sleep(forTimeInterval: 5)
@@ -33,13 +33,12 @@ class ClassA {
                 self?.setSurname(newSurname)
                 self?.printIt()
                 print("\(name) \(surname)")
-                otherSelf?.setName(newName)
-                otherSelf?.setSurname(newSurname)
-                otherSelf?.printIt()
+                otherRef.setName(newName)
+                otherRef.setSurname(newSurname)
+                otherRef.printIt()
                 print("Background Thread executed")
             }
         }
-        otherSelf = nil
     }
 
     deinit {
